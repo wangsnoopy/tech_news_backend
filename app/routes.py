@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from app import app, db
 import re  # Regular expressions for email validation
+from app.rss_to_json import fetch_rss_to_json # Import rss function
 
 # Email validation function
 def is_valid_email(email):
@@ -10,6 +11,15 @@ def is_valid_email(email):
 @app.route('/')
 def home():
     return "Welcome to Tech News Aggregator!"
+####### Fetch and Insert RSS Data (/fetch-rss) #######
+@app.route('/fetch-rss', methods=['GET'])
+def fetch_rss_data():
+    try:
+        rss_url = "https://news.ycombinator.com/rss"
+        articles = fetch_rss_to_json(rss_url)
+        return jsonify({"message": f"Fetched and inserted {len(articles)} articles"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 #######Newest Route (/newest))########
 @app.route('/newest', methods=['GET'])
