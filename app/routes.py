@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from app import app, db
 import re  # Regular expressions for email validation
-from app.rss_to_json import fetch_rss_to_json # Import rss function
+from app.rss_to_json import fetch_rss_to_json, fetch_products_to_json
 
 # Email validation function
 def is_valid_email(email):
@@ -11,15 +11,6 @@ def is_valid_email(email):
 @app.route('/')
 def home():
     return "Welcome to Tech News Aggregator!"
-####### Fetch and Insert RSS Data (/fetch-rss) #######
-@app.route('/fetch-rss', methods=['GET'])
-def fetch_rss_data():
-    try:
-        rss_url = "https://news.ycombinator.com/rss"
-        articles = fetch_rss_to_json(rss_url)
-        return jsonify({"message": f"Fetched and inserted {len(articles)} articles"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 #######Newest Route (/newest))########
 @app.route('/newest', methods=['GET'])
@@ -34,6 +25,22 @@ def get_newest():
             article['_id'] = str(article['_id'])
 
         return jsonify(articles), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+#######Products Route (/products)########
+@app.route('/products', methods=['GET'])
+def get_products():
+    try:
+        # Access the 'articles' collection
+        products_collection = db['products']
+        products = list(products_collection.find())
+
+        # Convert MongoDB ObjectId to string for JSON serialization
+        for product in products:
+            product['_id'] = str(product['_id'])
+
+        return jsonify(products), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
