@@ -19,5 +19,9 @@ EXPOSE 5000
 # Set environment variables (if needed, from .env file)
 ENV FLASK_ENV=production
 
+ARG MONGO_URI
+
+ENV MONGO_URI=$MONGO_URI
+
 # Command to run the Flask app
 CMD ["python", "run.py"]
