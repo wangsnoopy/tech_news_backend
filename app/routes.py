@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from app import app, db
 import re  # Regular expressions for email validation
-from app.rss_to_json import fetch_rss_to_json, fetch_products_to_json
+from app.rss_to_json import fetch_rss_to_json, fetch_products_to_json, fetch_tools_to_json
 
 # Email validation function
 def is_valid_email(email):
@@ -26,6 +26,7 @@ def get_newest():
 
         return jsonify(articles), 200
     except Exception as e:
+        print(str(e))
         return jsonify({"error": str(e)}), 500
 
 #######Products Route (/products)########
@@ -72,6 +73,7 @@ def get_categories():
             
             return jsonify({"message": f"Category '{category_name}' added successfully!"}), 201
         except Exception as e:
+            print(str(e))
             return jsonify({"error": str(e)}), 500
     
 ########Subscribe route (/subscribe)########
@@ -99,3 +101,19 @@ def subscribe():
         return jsonify({"message": "Subscription successful!"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500  # Error handling
+    
+########Tools route (/tools)########
+@app.route('/tool', methods=['GET'])
+def get_tools():
+    try:
+        # Access the 'articles' collection
+        tools_collection = db['tools']
+        tools = list(tools_collection.find())
+
+        # Convert MongoDB ObjectId to string for JSON serialization
+        for tool in tools:
+            tool['_id'] = str(tool['_id'])
+
+        return jsonify(tools), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

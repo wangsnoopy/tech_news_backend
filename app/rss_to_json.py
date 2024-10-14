@@ -10,8 +10,9 @@ client = MongoClient(mongo_uri)
 db = client['tech_news_db']
 articles_collection = db['articles']
 products_collection = db['products']
+tools_collection = db['tools']
 
-# Function to fetch and convert RSS feed to JSON
+# Function to fetch and convert RSS feed to JSON for news
 def fetch_rss_to_json(feed_url):
     feed = feedparser.parse(feed_url)
     articles = []
@@ -59,9 +60,28 @@ def fetch_products_to_json(feed_url):
     
     return products
 
-# if not mongo_uri:
-#     raise Exception("MongoDB URI not set in environment variables")
 
-# print(f"Connecting to MongoDB at: {mongo_uri}")
-# client = MongoClient(mongo_uri)
-# db = client['tech_news_db']
+# Function to fetch and convert RSS feed for tools
+def fetch_tools_to_json(feed_url):
+    feed = feedparser.parse(feed_url)
+    tools = []
+    
+    # Extract relevant data from the RSS feed
+    for entry in feed.entries:
+        tool = {
+            'guid': entry.get('guid'),
+            'url': entry.get('link'),
+            'title': entry.get('title'),
+            'content_html': entry.get('content_html', ''),
+            'date_published': entry.get('published'),
+            'author': entry.get('author') if isinstance(entry.get('author'), str) else entry.get('author', {}).get('name', '')
+        }
+        tools.append(tool)
+
+    # Insert products into MongoDB
+    if tools:
+        for tool in tools:
+         # Check if the product already exists
+            tools_collection.insert_one(tool)
+    
+    return tools
