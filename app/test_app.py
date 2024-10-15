@@ -93,3 +93,17 @@ class TestFlaskAPI(unittest.TestCase):
         self.assertIn("Invalid email format", response.json().get('error', ''), "Response message does not match expected value for invalid email")
 
         # the except code of the backend is 201/400/400 for the three test case
+
+    def test_get_tools(self):
+        response = requests.get(f"{BASE_URL_TOOLS}")
+        
+        # Check that the status code is 200
+        self.assertEqual(response.status_code, 200, "Expected status code 200")
+        
+        # Check that the response is in JSON format
+        self.assertTrue(response.headers['Content-Type'] == 'application/json', "Response is not JSON")
+        
+        data = response.json()
+
+        self.assertIn('title', data[0], "Response is missing 'titles' field")
+        self.assertIn('summary', data[0], "Response is missing 'summary' field")
