@@ -14,6 +14,9 @@ tools_collection = db['tools']
 
 # Function to fetch and convert RSS feed to JSON for news
 def fetch_rss_to_json(feed_url):
+    # Clear the existing data in the collection
+    articles_collection.delete_many({})  # Delete all previous articles
+
     feed = feedparser.parse(feed_url)
     articles = []
     
@@ -22,7 +25,7 @@ def fetch_rss_to_json(feed_url):
         article = {
             'title': entry.title,
             'link': entry.link,
-            'summary': entry.summary,
+            # 'summary': entry.summary,
             'published': entry.published
         }
         articles.append(article)
@@ -37,6 +40,9 @@ def fetch_rss_to_json(feed_url):
 
 # Function to fetch and convert RSS feed for products
 def fetch_products_to_json(feed_url):
+    # Clear the existing data in the collection
+    products_collection.delete_many({})  # Delete all previous products
+
     feed = feedparser.parse(feed_url)
     products = []
     
@@ -63,6 +69,9 @@ def fetch_products_to_json(feed_url):
 
 # Function to fetch and convert RSS feed for tools
 def fetch_tools_to_json(feed_url):
+    # Clear the existing data in the collection
+    tools_collection.delete_many({})  # Delete all previous tools
+    
     feed = feedparser.parse(feed_url)
     tools = []
     

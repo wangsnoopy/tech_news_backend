@@ -2,7 +2,7 @@ from flask import jsonify, request
 from app import app, db
 import re  # Regular expressions for email validation
 from app.rss_to_json import fetch_rss_to_json, fetch_products_to_json, fetch_tools_to_json
-from flask_cors import CORS
+from flask_cors import CORS # type: ignore
 
 # give acess to frontend
 CORS(app, origins=["http://localhost:3000"])
