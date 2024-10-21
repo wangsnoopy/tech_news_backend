@@ -1,11 +1,11 @@
 import unittest
 import requests # request library to make HTTP request to the Falsk API
 
-BASE_URL_NEWS = "http://localhost:5001/newest"
-BASE_URL_PRODUCTS = "http://localhost:5001/products"
-BASE_URL_CATEGORIES = "http://localhost:5001/categories"
-BASE_URL_SUBSCRIBE = "http://localhost:5001/subscribe"
-BASE_URL_TOOLS = "http://localhost:5001/tool"
+BASE_URL_NEWS = "http://localhost:3000/newest"
+BASE_URL_PRODUCTS = "http://localhost:3000/products"
+BASE_URL_CATEGORIES = "http://localhost:3000/categories"
+BASE_URL_SUBSCRIBE = "http://localhost:3000/subscribe"
+BASE_URL_TOOLS = "http://localhost:3000/tool"
 
 # Define a test case class that inherits from unittest.TestCase.
 class TestFlaskAPI(unittest.TestCase):
