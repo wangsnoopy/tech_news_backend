@@ -13,8 +13,8 @@ RUN pip3 install -r requirements.txt
 # Copy the rest of the application into the container
 COPY . .
 
-# Expose port 5000 to allow external connections to the Flask app
-EXPOSE 5000
+# Expose port 3000 to allow external connections to the Flask app
+EXPOSE 3000
 
 # Set environment variables (if needed, from .env file)
 ENV FLASK_ENV=production
