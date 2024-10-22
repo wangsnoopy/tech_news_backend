@@ -31,7 +31,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install beautifulsoup4
         pip install bs4
-        pip install -r requirements.txt
+        python -m pip install -r requirements.txt
 
     - name: List installed packages
       run: pip list  # Verify installed packages
