@@ -30,7 +30,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
+        
+    - name: List installed packages
+      run: pip list  # Verify installed packages
     # Step 4: Run the parser script
     - name: Run parser.py
       run: |
