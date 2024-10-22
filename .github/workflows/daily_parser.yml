@@ -28,9 +28,10 @@ jobs:
     # Step 3: Install dependencies
     - name: Install dependencies
       run: |
+        pip install beautifulsoup4
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
+
     - name: List installed packages
       run: pip list  # Verify installed packages
     # Step 4: Run the parser script
