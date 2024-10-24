@@ -14,6 +14,17 @@ jobs:
   run-parser:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
     steps:
     # Step 1: Checkout the repository
     - name: Checkout code
@@ -27,7 +38,7 @@ jobs:
 
     - name: Clear pip cache
       run: pip cache purge
-      
+
     # Step 3: Install dependencies
     - name: Install dependencies
       run: |
@@ -41,5 +52,7 @@ jobs:
       run: pip list  # Verify installed packages
     # Step 4: Run the parser script
     - name: Run parser.py
+      env:
+        MONGO_URI: "mongodb://localhost:27017/tech_news_db"  # Use the local MongoDB URI
       run: |
         python app/parser.py

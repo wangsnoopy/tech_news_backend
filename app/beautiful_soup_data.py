@@ -1,8 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import json
-import pymongo
-import feedparser
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
