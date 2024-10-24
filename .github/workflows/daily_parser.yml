@@ -52,5 +52,7 @@ jobs:
       run: pip list  # Verify installed packages
     # Step 4: Run the parser script
     - name: Run parser.py
-      run: |
+      env:
+        MONGO_URI: "mongodb+srv://wangaus1997:technews2024@cluster0.wgtmm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      run:
         python app/parser.py
