@@ -52,7 +52,5 @@ jobs:
       run: pip list  # Verify installed packages
     # Step 4: Run the parser script
     - name: Run parser.py
-      env:
-        MONGO_URI: "mongodb://localhost:27017/tech_news_db"  # Use the local MongoDB URI
       run: |
         python app/parser.py
