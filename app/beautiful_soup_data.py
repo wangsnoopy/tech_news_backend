@@ -13,6 +13,7 @@ db = client['tech_news_db']
 tools_collection = db['tools']
 
 def fetch_tools_data_to_json():
+    tools_collection.delete_many({})
     # Scrape GitHub Trending page
     url = 'https://github.com/trending?since=weekly'
     page = requests.get(url)
@@ -30,10 +31,20 @@ def fetch_tools_data_to_json():
         summary_tag = repo.find('p', class_='col-9 color-fg-muted my-1 pr-4')
         summary = summary_tag.text.strip() if summary_tag else "No description provided."
 
+        # Extract star count
+        star_tag = repo.find('a', href=lambda href: href and '/stargazers' in href)
+        stars = star_tag.text.strip().replace(",", "") if star_tag else "0"
+
+        # Extract fork count by locating the fork icon and finding the next sibling
+        fork_tag = repo.find('a', href=lambda href: href and '/forks' in href)
+        forks = fork_tag.text.strip().replace(",", "") if fork_tag else "0"
+
         # Create repository object
         repository = {
             'title': title,
-            'summary': summary
+            'summary': summary,
+            'stars': int(stars),
+            'forks': int(forks)
         }
 
         # Insert repository into MongoDB if it doesn't already exist
