@@ -13,7 +13,8 @@ RUN pip3 install -r requirements.txt
 # Copy the rest of the application into the container
 COPY . .
 
-COPY app/.env .env
+# for docekr image
+# COPY app/.env .env
 
 # Expose port 5001 to allow external connections to the Flask app
 EXPOSE 5001
@@ -21,9 +22,10 @@ EXPOSE 5001
 # Set environment variables (if needed, from .env file)
 ENV FLASK_ENV=production
 
-# ARG MONGO_URI
+# for EC2
+ARG MONGO_URI
 
-# ENV MONGO_URI=$MONGO_URI
+ENV MONGO_URI=$MONGO_URI
 
 # Command to run the Flask app
 CMD ["python", "run.py"]
