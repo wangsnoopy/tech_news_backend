@@ -39,12 +39,17 @@ def fetch_tools_data_to_json():
         fork_tag = repo.find('a', href=lambda href: href and '/forks' in href)
         forks = fork_tag.text.strip().replace(",", "") if fork_tag else "0"
 
+        # Extraxt which programing language
+        language_tag = repo.find('span', itemprop='programmingLanguage')
+        language = language_tag.text.strip() if language_tag else "Unknown"
+
         # Create repository object
         repository = {
             'title': title,
             'summary': summary,
             'stars': int(stars),
-            'forks': int(forks)
+            'forks': int(forks),
+            'language': language
         }
 
         # Insert repository into MongoDB if it doesn't already exist
