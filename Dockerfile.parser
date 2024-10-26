@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . .
 
-COPY app/.env .env
+# COPY app/.env .env
 
 # Command to run the parser.py script
 CMD ["python", "app/parser.py"]
