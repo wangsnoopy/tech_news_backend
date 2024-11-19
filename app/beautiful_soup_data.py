@@ -12,6 +12,7 @@ client = MongoClient(mongo_uri)
 db = client['tech_news_db']
 tools_collection = db['tools']
 
+# Get tools data
 def fetch_tools_data_to_json():
     tools_collection.delete_many({})
     # Scrape GitHub Trending page
@@ -58,3 +59,84 @@ def fetch_tools_data_to_json():
             repositories.append(repository)
 
     return repositories
+
+# Function to get the icon url from the webpage
+def fetch_icon_url(page_url):
+    try:
+        response = requests.get(page_url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            icon_tag = soup.find("link", rel="icon") or soup.find("link", rel="shortcut icon")
+            if icon_tag and icon_tag.get("href"):
+                icon_url = icon_tag["href"]
+                # Handle relative URLs
+                if icon_url.startswith('/'):
+                    return page_url.rstrip('/') + icon_url
+                return icon_url
+        return None
+    except requests.RequestException as e:
+        print(f"Failed to fetch icon for {page_url}: {e}")
+        return None
+
+# products icon
+def fetch_product_icon_url(page_url):
+    try:
+        response = requests.get(page_url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Look for an <img> tag first
+            img_tag = soup.find("img", class_="relative z-0 rounded")
+            if img_tag:
+                # Prefer srcset if available; fallback to src
+                icon_url = img_tag.get("srcset") or img_tag.get("src")
+                
+                # If srcset exists, get the first URL (before the first space)
+                if icon_url and " " in icon_url:
+                    icon_url = icon_url.split()[0]
+                
+                return icon_url
+            
+            # If no <img> tag is found, then go to the cur link to get the web icon
+
+        return None
+    except requests.RequestException as e:
+        print(f"Failed to fetch icon for {page_url}: {e}")
+        return None
+    
+# product tag line
+def fetch_tagline(page_url):
+    try:
+        response = requests.get(page_url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find the <h2> tag with the specified class
+            tagline_tag = soup.find("h2", class_="text-24 font-light text-light-gray styles_tagline__Mhn2j")
+            if tagline_tag:
+                return tagline_tag.text.strip()  # Extract and clean up the text content
+            
+            # If no matching tag is found
+            print("No matching <h2> tag found.")
+            return None
+
+    except requests.RequestException as e:
+        print(f"Failed to fetch tagline for {page_url}: {e}")
+        return None
+    
+# fetch description
+def fetch_descriptions(page_url):
+    try:
+        response = requests.get(page_url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find all <div> tags with the specified class
+            description_tags = soup.find_all("div", class_="styles_htmlText__eYPgj text-16 font-normal text-dark-gray")
+            descriptions = [tag.text.strip() for tag in description_tags]  # Extract and clean text from each tag
+            
+            return descriptions if descriptions else "No descriptions found."
+
+    except requests.RequestException as e:
+        print(f"Failed to fetch descriptions for {page_url}: {e}")
+        return None

@@ -1,6 +1,8 @@
 import feedparser
 import os
+import requests
 from pymongo import MongoClient
+import beautiful_soup_data as bsd
 from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
@@ -12,6 +14,7 @@ articles_collection = db['articles']
 products_collection = db['products']
 tools_collection = db['tools']
 
+
 # Function to fetch and convert RSS feed to JSON for news
 def fetch_rss_to_json(feed_url):
     # Clear the existing data in the collection
@@ -22,10 +25,11 @@ def fetch_rss_to_json(feed_url):
     
     # Extract relevant data from the RSS feed
     for entry in feed.entries:
+        icon_url = bsd.fetch_icon_url(entry.link)
         article = {
             'title': entry.title,
             'link': entry.link,
-            # 'summary': entry.summary,
+            'icon_url': icon_url,
             'published': entry.published
         }
         articles.append(article)
@@ -48,13 +52,20 @@ def fetch_products_to_json(feed_url):
     
     # Extract relevant data from the RSS feed
     for entry in feed.entries:
+        icon_url = bsd.fetch_product_icon_url(entry.link)
+        tag_line = bsd.fetch_tagline(entry.link)
+        description = bsd.fetch_descriptions(entry.link)
+        if not icon_url:
+            icon_url = icon_url = bsd.fetch_icon_url(entry.link)
         product = {
             'guid': entry.get('guid'),
             'url': entry.get('link'),
             'title': entry.get('title'),
-            'content_html': entry.get('content_html', ''),
             'date_published': entry.get('published'),
-            'author': entry.get('author') if isinstance(entry.get('author'), str) else entry.get('author', {}).get('name', '')
+            'author': entry.get('author') if isinstance(entry.get('author'), str) else entry.get('author', {}).get('name', ''),
+            'icon_url': icon_url,
+            'tag_line': tag_line,
+            'description': description
         }
         products.append(product)
 
