@@ -2,7 +2,7 @@ import feedparser
 import os
 import requests
 from pymongo import MongoClient
-import beautiful_soup_data as bsd
+import app.beautiful_soup_data as bsd
 from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()

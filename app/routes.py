@@ -5,7 +5,7 @@ from app.rss_to_json import fetch_rss_to_json, fetch_products_to_json, fetch_too
 from flask_cors import CORS # type: ignore
 
 # give acess to frontend
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://localhost:3000","http://192.168.2.172"])
 # Email validation function
 def is_valid_email(email):
     return re.match(r"[^@]+@[^@]+\.[^@]+", email)
