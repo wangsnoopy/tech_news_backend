@@ -44,13 +44,18 @@ def fetch_tools_data_to_json():
         language_tag = repo.find('span', itemprop='programmingLanguage')
         language = language_tag.text.strip() if language_tag else "Unknown"
 
+        # Extract repository link
+        link_tag = repo.find('a', href=True, class_='Link')
+        link = f"https://github.com{link_tag['href']}" if link_tag else "No link provided"
+
         # Create repository object
         repository = {
             'title': title,
             'summary': summary,
             'stars': int(stars),
             'forks': int(forks),
-            'language': language
+            'language': language,
+            'link': link
         }
 
         # Insert repository into MongoDB if it doesn't already exist
