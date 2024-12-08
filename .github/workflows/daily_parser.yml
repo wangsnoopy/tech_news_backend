@@ -1,13 +1,13 @@
 name: Run Parser Daily
 
-# Controls when the action will run
-on:
-  schedule:
-    # Runs at 00:00 UTC every day
-    - cron: '0 0 * * *'
+# # Controls when the action will run
+# # on:
+# #   schedule:
+# #     # Runs at 00:00 UTC every day
+# #     - cron: '0 0 * * *'
 
-  # Allows the workflow to be run manually (optional)
-  workflow_dispatch:
+#   # Allows the workflow to be run manually (optional)
+#   workflow_dispatch:
 
 # Job to run the script
 jobs:
